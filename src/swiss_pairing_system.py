@@ -44,6 +44,15 @@ class SwissPairingSystem():
     def drop_player(self, player_id):
         del self.players_dict[player_id]
 
+    def winner(self):
+        players = []
+        for player_id in self.players_dict:
+            players.append(self.players_dict[player_id])
+
+        winner = max(players, key=lambda x: x.tiebreaker)
+
+        return winner
+
     def pair_players(self, player1_id, player2_id):
         self.players_dict[player1_id].opponents.append(self.players_dict[player2_id])
         self.players_dict[player2_id].opponents.append(self.players_dict[player1_id])
@@ -70,9 +79,9 @@ class SwissPairingSystem():
         Process overview:
             1.) Create lists of players with each point value
 
-            2.) Create a list of all current points and sort from highest to lowest
+            2.) Create a list of all current tiebreakers and sort from highest to lowest
 
-            3.) Loop through each list of points and assign players opponents based with same points
+            3.) Loop through each list of tiebreakers and assign players opponents based with same tiebreakers
 
             4.) Check for left over players and assign a pair down
         """
@@ -193,8 +202,6 @@ class SwissPairingSystem():
             self.players_dict[player1_id].results.append(result)
             self.players_dict[player2_id].draw_match()
             self.players_dict[player2_id].results.append(result)
-
-            self.printdbg("empate mesa %s" % (table))
         else:
             # Figure out who won and assing points
             if result[0] > result[1]:
@@ -203,16 +210,12 @@ class SwissPairingSystem():
 
                 otresult = [result[1], result[0], result[2]]
                 self.players_dict[player2_id].results.append(otresult)
-
-                self.printdbg("o player: %s da mesa: %s ganhou" % (self.players_dict[player1_id].name, table))
             elif result[1] > result[0]:
                 self.players_dict[player2_id].win_match()
                 self.players_dict[player1_id].results.append(result)
 
                 otresult = [result[1], result[0], result[2]]
                 self.players_dict[player2_id].results.append(otresult)
-
-                self.printdbg("o player: %s da mesa: %s ganhou" % (self.players_dict[player2_id].name, table))
 
         # Remove table reported from open tables
         self.tables_out.remove(table)
@@ -221,14 +224,14 @@ class SwissPairingSystem():
         if not len(self.tables_out):
             self.calculate_tiebreakers()
 
-    def winner(self):
+    def current_result(self):
         players = []
         for player_id in self.players_dict:
             players.append(self.players_dict[player_id])
 
-        winner = max(players, key=lambda x: x.tiebreaker)
+        players.sort(key=lambda x: x.tiebreaker, reverse=True)
 
-        return winner
+        return list(map(lambda x: x.name, players))
 
     def print_pairs(self, pairs):
         new_pairs = {}
@@ -243,8 +246,3 @@ class SwissPairingSystem():
 
         print(new_pairs)
         print("")
-
-    def printdbg(self, msg):
-        if self.dbg:
-            print(msg)
-            print("")

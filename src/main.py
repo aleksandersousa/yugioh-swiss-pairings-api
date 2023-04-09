@@ -29,6 +29,8 @@ for table in pairings1:
         else:
             to.reportMatch(table, [1, 1, 1])
 
+print(to.current_result())
+
 pairings2 = to.pair_round()
 to.print_pairs(pairings2)
 
@@ -47,6 +49,8 @@ for table in pairings2:
             to.reportMatch(table, [0, 0, 1])
         else:
             to.reportMatch(table, [1, 1, 1])
+
+print(to.current_result())
 
 to.drop_player(players[-1].id)
 
@@ -68,5 +72,7 @@ for table in pairings3:
             to.reportMatch(table, [0, 0, 1])
         else:
             to.reportMatch(table, [1, 1, 1])
+
+print(to.current_result())
 
 print("o vencedor é: %s" % vars(to.winner()))
