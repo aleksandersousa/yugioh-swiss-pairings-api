@@ -41,6 +41,9 @@ class SwissPairingSystem():
 
         self.players_dict[player.id] = player
 
+    def drop_player(self, player_id):
+        del self.players_dict[player_id]
+
     def pair_players(self, player1_id, player2_id):
         self.players_dict[player1_id].opponents.append(self.players_dict[player2_id])
         self.players_dict[player2_id].opponents.append(self.players_dict[player1_id])

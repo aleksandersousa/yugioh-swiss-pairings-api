@@ -48,6 +48,8 @@ for table in pairings2:
         else:
             to.reportMatch(table, [1, 1, 1])
 
+to.drop_player(players[-1].id)
+
 pairings3 = to.pair_round()
 to.print_pairs(pairings3)
 
