@@ -4,7 +4,7 @@ import networkx as nx
 from player import Player
 
 
-class SwissPairingSystem():
+class Tournament():
     def __init__(self, starting_table=1) -> None:
         # Will hold all player data
         self.players_dict = {}

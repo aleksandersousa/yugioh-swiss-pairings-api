@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from file import File
 from player import Player
 
-from swiss_pairing_system import SwissPairingSystem
+from tournament import Tournament
 
 app = Flask(__name__)
 
@@ -57,7 +57,7 @@ def delete_tournament(id):
 
 @app.route('/tournaments/<tournament_id>/add_players', methods=['POST'])
 def add_players(tournament_id):
-    tournament = SwissPairingSystem()
+    tournament = Tournament()
 
     player_names = request.get_json()['players']
 
@@ -73,7 +73,7 @@ def add_players(tournament_id):
 
 @app.route('/tournaments/<tournament_id>/drop_player/<player_id>', methods=['DELETE'])
 def drop_player(tournament_id, player_id):
-    tournament = SwissPairingSystem()
+    tournament = Tournament()
 
     file.load_tournament_data(tournament_id, tournament)
 
@@ -87,7 +87,7 @@ def drop_player(tournament_id, player_id):
 
 @app.route('/tournaments/<tournament_id>/pair_round', methods=['GET'])
 def pair_round(tournament_id):
-    tournament = SwissPairingSystem()
+    tournament = Tournament()
 
     file.load_tournament_data(tournament_id, tournament)
 
@@ -103,7 +103,7 @@ def pair_round(tournament_id):
 @app.route('/tournaments/<tournament_id>/report_match', methods=['POST'])
 def report_match(tournament_id):
     results = request.get_json()['results']
-    tournament = SwissPairingSystem()
+    tournament = Tournament()
 
     file.load_tournament_data(tournament_id, tournament)
 
