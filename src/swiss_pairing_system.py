@@ -5,10 +5,7 @@ from player import Player
 
 
 class SwissPairingSystem():
-    def __init__(self, starting_table=1, dbg=False) -> None:
-        # For debbuging
-        self.dbg = dbg
-
+    def __init__(self, starting_table=1) -> None:
         # Will hold all player data
         self.players_dict = {}
 
@@ -63,12 +60,14 @@ class SwissPairingSystem():
         self.open_table += 1
 
     def assign_bye(self, player1_id):
-        self.players_dict[player1_id].results.append([2, 0, 0])
+        player = self.players_dict[player1_id]
 
-        self.players_dict[player1_id].opponents.append(Player(name="bye"))
+        player.results.append([2, 0, 0])
+
+        player.opponents.append(Player(name="bye"))
 
         # Add points for "winning"
-        self.players_dict[player1_id].win_match()
+        player.win_match()
 
     def calculate_tiebreakers(self):
         for player_id in self.players_dict:
@@ -188,7 +187,7 @@ class SwissPairingSystem():
             # If there are still tables out and we haven't had a forced pairing, return the tables still "playing"
             return self.tables_out
 
-    def reportMatch(self, table, result):
+    def report_match(self, table, result):
         if table == 'bye':
             return
 
@@ -218,7 +217,7 @@ class SwissPairingSystem():
                 self.players_dict[player2_id].results.append(otresult)
 
         # Remove table reported from open tables
-        self.tables_out.remove(table)
+        self.tables_out.remove(int(table))
 
         # When the last table reports, update tie breakers automatically
         if not len(self.tables_out):
@@ -233,7 +232,7 @@ class SwissPairingSystem():
 
         return list(map(lambda x: x.name, players))
 
-    def print_pairs(self, pairs):
+    def human_friendly_pairs(self, pairs):
         new_pairs = {}
         for table in pairs:
             player1_id = pairs[table][0]
@@ -244,5 +243,10 @@ class SwissPairingSystem():
             else:
                 new_pairs[table] = [self.players_dict[player1_id].name, self.players_dict[player2_id].name]
 
-        print(new_pairs)
+        keys_values = new_pairs.items()
+
+        return {str(key): value for key, value in keys_values}
+
+    def print_pairs(self, pairs):
+        print(self.human_friendly_pairs(pairs))
         print("")

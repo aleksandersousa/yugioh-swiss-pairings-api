@@ -6,13 +6,29 @@ DRAW_POINTS = 1
 
 
 class Player():
-    def __init__(self, name) -> None:
-        self.id = str(uuid.uuid4())
+    def __init__(self, name, id=None, score=0, tiebreaker=0, results=[]) -> None:
         self.name = name
-        self.score = 0
-        self.tiebreaker = 0
-        self.results = []
         self.opponents = []
+
+        if id:
+            self.id = id
+        else:
+            self.id = str(uuid.uuid4())
+
+        if score:
+            self.score = score
+        else:
+            self.score = 0
+
+        if tiebreaker:
+            self.tiebreaker = tiebreaker
+        else:
+            self.tiebreaker = 0
+
+        if results:
+            self.results = results
+        else:
+            self.results = []
 
     def win_match(self):
         self.score += WIN_POINTS
@@ -28,12 +44,15 @@ class Player():
             op_op_win_percent_total += opponent.calculate_opponents_win_percent()
 
         # get opponents opponents win percent
-        op_op_win_percent = op_op_win_percent_total / len(self.opponents)
+        if not len(self.opponents):
+            op_op_win_percent = 0
+        else:
+            op_op_win_percent = op_op_win_percent_total / len(self.opponents)
 
         # tiebreaker is xxyyyzzz format,
         # where xx is this player score
-        # where yyy is this player opponents win percent
-        # where zzz is this player opponents opponents win percent
+        # and yyy is this player opponents win percent
+        # and zzz is this player opponents opponents win percent
         self.tiebreaker = int(str(self.score) + str(self.calculate_opponents_win_percent()) +
                               str(int(op_op_win_percent)))
 
