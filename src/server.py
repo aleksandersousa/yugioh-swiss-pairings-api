@@ -116,3 +116,8 @@ def report_match(tournament_id):
     file.save_tournament_data(tournament_id, data)
 
     return jsonify({'current_result': current_result})
+
+
+# main driver function
+if __name__ == "__main__":
+    app.run()
